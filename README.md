@@ -1,6 +1,6 @@
 # Infra Post API Server
 
-Infra Development에 사용되는 포스트 서비스 API 입니다
+Infra Development에 사용되는 파일 서비스 API 입니다
 
 ---
 ## 관련 저장소
@@ -19,7 +19,7 @@ https://github.com/seculoper235/infra-test-web
 gradle build
 
 // 이미지 생성
-docker build -t post-service:1.0 -f ./docker/Dockerfile .
+docker build -t file-service:1.0 -f ./docker/Dockerfile .
 ```
 
 ### DB 서버 생성
