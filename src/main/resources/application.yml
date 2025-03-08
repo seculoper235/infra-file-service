@@ -1,0 +1,48 @@
+spring:
+  profiles:
+    group:
+      server: production
+    active: server
+---
+
+# Spring
+spring:
+  config:
+    activate:
+      on-profile: production
+  devtools:
+    add-properties: false
+  output:
+    ansi:
+      enabled: always
+
+  # DataSource
+  main.allow-bean-definition-overriding: true
+  sql.init.encoding: UTF-8
+  datasource:
+    hikari:
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://${DB_URL}:5430/devteller?characterEncoding=utf-8
+      username: ${DB_USER}
+      password: ${DB_PASS}
+
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    open-in-view: false
+  liquibase:
+    change-log: db/changelog.yaml
+
+# Server
+server:
+  compression:
+    enabled: true
+    mime-types: text/html,text/plain,text/css,application/javascript,application/json
+    min-response-size: 500
+  port: 8080
+
+logging:
+  config: classpath:log4j2-local.xml

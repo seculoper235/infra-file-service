@@ -1,0 +1,10 @@
+name: infra-compose
+services:
+  file-db:
+    image: postgres:15.4
+    command: -p 5430 -c idle_session_timeout=1805000
+    environment:
+      POSTGRES_USER: postteller
+      POSTGRES_PASSWORD: post123!
+    ports:
+      - "5430:5430"

@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - property:
+      dbms: postgresql, h2
+      name: function.now
+      value: now()
+  - property:
+      dbms: postgresql, h2
+      name: function.now
+      value: now()
+  - objectQuotingStrategy: QUOTE_ALL_OBJECTS
