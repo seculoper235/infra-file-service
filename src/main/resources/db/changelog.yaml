@@ -8,3 +8,41 @@ databaseChangeLog:
       name: function.now
       value: now()
   - objectQuotingStrategy: QUOTE_ALL_OBJECTS
+  - changeSet:
+      id: create-file
+      author: DevTeller
+      changes:
+        - createTable:
+            tableName: FILE
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: content_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: path
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: size
+                  type: serial
+                  constraints:
+                    nullable: false
+              - column:
+                  name: used
+                  type: number
+                  defaultValue: 0
