@@ -13,7 +13,7 @@ public class S3Config {
     public S3Client s3Client(
     ) {
         return S3Client.builder()
-                .region(Region.of("ap-northeast-2"))
+                .region(Region.AP_NORTHEAST_2)
                 .endpointOverride(URI.create("http://localhost:4566"))
                 // FIXME: https://github.com/aws/aws-sdk-java-v2/issues/3587
                 .forcePathStyle(true)
