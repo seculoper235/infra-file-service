@@ -9,6 +9,7 @@ public record File(
         String contentType,
         String path,
         Long size,
-        Boolean used
+        FileStatus status,
+        String mappedBy
 ) {
 }
