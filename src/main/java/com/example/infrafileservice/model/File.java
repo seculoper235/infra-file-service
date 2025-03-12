@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonSerialize
 public record File(
-        Long id,
+        String id,
         String name,
         String contentType,
         String path,
