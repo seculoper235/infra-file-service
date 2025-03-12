@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "\"FILE\"")
 @Builder
@@ -16,8 +18,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FileItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false, length = 40)
     private String name;
@@ -43,10 +45,10 @@ public class FileItem {
     }
 
     public File toModel() {
-        return new File(id, name, contentType, path, size, status, mappedBy);
+        return new File(id.toString(), name, contentType, path, size, status, mappedBy);
     }
 
     public FileReference toReference() {
-        return new FileReference(name, path);
+        return new FileReference(id.toString(), name, path);
     }
 }
