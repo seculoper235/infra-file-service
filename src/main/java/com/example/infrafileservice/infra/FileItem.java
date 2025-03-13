@@ -18,7 +18,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class FileItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(nullable = false, length = 40)
@@ -35,6 +34,7 @@ public class FileItem {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10, nullable = false)
+    @Builder.Default
     private FileStatus status = FileStatus.TEMP;
 
     @Column(name = "mapped_by", length = 40)
@@ -42,6 +42,10 @@ public class FileItem {
 
     public void changeStatus(FileStatus status) {
         this.status = status;
+    }
+
+    public void mapping(String mappedBy) {
+        this.mappedBy = mappedBy;
     }
 
     public File toModel() {

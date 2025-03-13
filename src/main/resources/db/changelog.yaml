@@ -17,8 +17,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: serial
-                  autoIncrement: true
+                  type: varchar(255)
                   constraints:
                     primaryKey: true
                     nullable: false

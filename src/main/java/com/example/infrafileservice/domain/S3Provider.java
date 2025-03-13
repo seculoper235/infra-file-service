@@ -44,12 +44,12 @@ public class S3Provider {
         return s3Client.getObject(request).response();
     }
 
-    public void deleteObjects(String bucket, List<String> keyList) {
+    public DeleteObjectsResponse deleteObjects(String bucket, List<String> keyList) {
         List<ObjectIdentifier> identifiers = keyList.stream()
                 .map(key -> ObjectIdentifier.builder().key(key).build())
                 .toList();
 
-        s3Client.deleteObjects(DeleteObjectsRequest.builder()
+        return s3Client.deleteObjects(DeleteObjectsRequest.builder()
                 .bucket(bucket).delete(
                         Delete.builder().objects(identifiers).build()
                 ).build());
