@@ -1,0 +1,21 @@
+name: infra-compose
+services:
+  file-db:
+    image: postgres:15.4
+    command: -p 5430 -c idle_session_timeout=1805000
+    environment:
+      POSTGRES_USER: fileteller
+      POSTGRES_PASSWORD: file123!
+    ports:
+      - "5430:5430"
+
+  file-s3:
+    image: localstack/localstack:latest
+    environment:
+      - AWS_DEFAULT_REGION=ap-northeast-2
+      - SERVICES=s3
+    ports:
+      - '4566:4566'
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"

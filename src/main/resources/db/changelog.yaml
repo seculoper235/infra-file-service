@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - property:
+      dbms: postgresql, h2
+      name: function.now
+      value: now()
+  - property:
+      dbms: postgresql, h2
+      name: function.now
+      value: now()
+  - objectQuotingStrategy: QUOTE_ALL_OBJECTS
+  - changeSet:
+      id: create-file
+      author: DevTeller
+      changes:
+        - createTable:
+            tableName: FILE
+            columns:
+              - column:
+                  name: id
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(40)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: content_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: path
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: size
+                  type: serial
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(10)
+                  defaultValue: TEMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mapped_by
+                  type: varchar(40)

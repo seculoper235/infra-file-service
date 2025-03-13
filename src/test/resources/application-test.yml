@@ -1,0 +1,21 @@
+spring:
+  # DataSource
+  main.allow-bean-definition-overriding: true
+  sql.init.encoding: UTF-8
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:test;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+      username: sa
+      password:
+
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+
+  liquibase:
+    change-log: db/changelog.yaml
