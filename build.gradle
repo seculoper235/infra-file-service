@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.4.3'
     id 'io.spring.dependency-management' version '1.1.7'
+    id "org.jooq.jooq-codegen-gradle" version "3.19.21"
 }
 
 group = 'com.example'
@@ -36,7 +37,14 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.liquibase:liquibase-core'
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
     runtimeOnly 'org.postgresql:postgresql'
+
+    jooqCodegen 'org.postgresql:postgresql'
+    jooqCodegen "org.jooq:jooq-meta-extensions-liquibase:3.19.21"
+    jooqCodegen "org.jooq:jooq:3.19.21"
+    jooqCodegen "org.jooq:jooq-meta:3.19.21"
+    jooqCodegen "org.jooq:jooq-codegen:3.19.21"
 
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 
@@ -54,4 +62,49 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jooq {
+    configuration {
+        generator {
+            database {
+                name = "org.jooq.meta.extensions.liquibase.LiquibaseDatabase"
+
+                properties {
+                    property {
+                        key = "rootPath"
+                        value = "${projectDir}/src/main/resources"
+                    }
+
+                    property {
+                        key = "scripts"
+                        value = "db/changelog.yaml"
+                    }
+
+                    property {
+                        key = "includeLiquibaseTables"
+                        value = true
+                    }
+
+                    property {
+                        key = "useParsingConnection"
+                        value = false
+                    }
+
+                    property {
+                        key = "changeLogParameters.contexts"
+                        value = "!test"
+                    }
+                }
+            }
+        }
+    }
+}
+
+tasks.named('compileJava').configure {
+    it.dependsOn(tasks.named('jooqCodegen'))
+}
+
+tasks.named('compileTestJava').configure {
+    it.dependsOn(tasks.named('jooqCodegen'))
 }
