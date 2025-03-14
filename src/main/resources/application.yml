@@ -36,6 +36,13 @@ spring:
   liquibase:
     change-log: db/changelog.yaml
 
+  # Scheduling
+  task:
+    scheduling:
+      temp: "0 15 1 * * *"
+      delete: "0 15 3 * * *"
+      pool:
+        size: 2
 # Server
 server:
   compression:
