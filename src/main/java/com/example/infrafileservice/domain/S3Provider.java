@@ -9,16 +9,23 @@ import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
 public class S3Provider {
     private final S3Client s3Client;
+    public static final String BUCKET_NAME = "file-bucket";
 
     public S3Provider(S3Client s3Client) {
         this.s3Client = s3Client;
 
-        this.s3Client.createBucket(CreateBucketRequest.builder().bucket("file-bucket").build());
+        boolean existBucket = this.s3Client.listBuckets().buckets().stream()
+                .anyMatch(b -> Objects.equals(b.name(), BUCKET_NAME));
+
+        if (!existBucket) {
+            this.s3Client.createBucket(CreateBucketRequest.builder().bucket(BUCKET_NAME).build());
+        }
     }
 
     public PutObjectResponse createObject(String bucket, String key, MultipartFile multipartFile) throws IOException {

@@ -1,4 +1,4 @@
-package com.example.infrafileservice.infra;
+package com.example.infrafileservice.common;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

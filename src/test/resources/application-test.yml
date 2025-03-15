@@ -16,6 +16,14 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+  # Scheduling
+  task:
+    scheduling:
+      temp: "* * * * * *"
+      delete: "* * * * * *"
+      pool:
+        size: 2
+
 
   liquibase:
     change-log: db/changelog.yaml

@@ -2,6 +2,8 @@ package com.example.infrafileservice.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.time.Instant;
+
 @JsonSerialize
 public record File(
         String id,
@@ -10,6 +12,8 @@ public record File(
         String path,
         Long size,
         FileStatus status,
-        String mappedBy
+        String mappedBy,
+        Instant createdAt,
+        Instant updatedAt
 ) {
 }

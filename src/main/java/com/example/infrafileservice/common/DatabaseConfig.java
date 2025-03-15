@@ -1,4 +1,4 @@
-package com.example.infrafileservice.infra;
+package com.example.infrafileservice.common;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

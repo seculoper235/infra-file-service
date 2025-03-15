@@ -38,7 +38,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: size
-                  type: serial
+                  type: bigint
                   constraints:
                     nullable: false
               - column:
@@ -50,3 +50,20 @@ databaseChangeLog:
               - column:
                   name: mapped_by
                   type: varchar(40)
+  - changeSet:
+      id: addColumn-datetime
+      author: DevTeller
+      changes:
+        - addColumn:
+            tableName: FILE
+            columns:
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
