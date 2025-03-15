@@ -2,6 +2,7 @@ package com.example.infrafileservice.web;
 
 import com.example.infrafileservice.service.FileReference;
 import com.example.infrafileservice.service.FileService;
+import com.example.infrafileservice.web.exception.model.EntityNotFoundException;
 import com.example.infrafileservice.web.exception.model.PutObjectException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class FileController {
     @PostMapping("/mapping")
     public ResponseEntity<List<FileReference>> mapping(
             @RequestBody MappingRequest mappingRequest
-    ) {
+    ) throws EntityNotFoundException {
         String mapping = mappingRequest.mappedBy();
         List<UUID> files = mappingRequest.files().stream().map(UUID::fromString).toList();
 
