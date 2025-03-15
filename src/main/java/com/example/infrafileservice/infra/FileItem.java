@@ -8,7 +8,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -40,6 +43,16 @@ public class FileItem {
     @Column(name = "mapped_by", length = 40)
     private String mappedBy;
 
+    @CreationTimestamp
+    @Builder.Default
+    @Column(name = "created_at")
+    private Instant createdAt = Instant.now();
+
+    @UpdateTimestamp
+    @Builder.Default
+    @Column(name = "updated_at")
+    private Instant updatedAt = Instant.now();
+
     public void changeStatus(FileStatus status) {
         this.status = status;
     }
@@ -49,7 +62,17 @@ public class FileItem {
     }
 
     public File toModel() {
-        return new File(id.toString(), name, contentType, path, size, status, mappedBy);
+        return new File(
+                id.toString(),
+                name,
+                contentType,
+                path,
+                size,
+                status,
+                mappedBy,
+                createdAt,
+                updatedAt
+        );
     }
 
     public FileReference toReference() {
