@@ -10,17 +10,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Slf4j
 @RestControllerAdvice
 public class RouteExceptionHandler {
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleEntityNotFoundException(EntityNotFoundException e) {
 
         ExceptionResponse response = new ExceptionResponse(
-                new Date().toString(),
+                dateFormat.format(new Date()),
                 ExceptionStatus.FS001,
                 e.getMessage());
 
@@ -33,7 +35,7 @@ public class RouteExceptionHandler {
     public ResponseEntity<ExceptionResponse> handlePutObjectException(PutObjectException e) {
 
         ExceptionResponse response = new ExceptionResponse(
-                new Date().toString(),
+                dateFormat.format(new Date()),
                 ExceptionStatus.FS002,
                 e.getMessage());
 
@@ -46,7 +48,7 @@ public class RouteExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleS3Exception(S3Exception e) {
 
         ExceptionResponse response = new ExceptionResponse(
-                new Date().toString(),
+                dateFormat.format(new Date()),
                 ExceptionStatus.FS003,
                 e.getMessage());
 
