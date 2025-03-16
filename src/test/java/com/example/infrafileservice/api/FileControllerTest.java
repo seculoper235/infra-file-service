@@ -41,7 +41,7 @@ public class FileControllerTest {
     @Test
     @DisplayName("파일 업로드 시, FileTable에 데이터가 저장되고 S3에 파일이 업로드 된다")
     public void upload_file_save_table_upload_s3() throws Exception {
-        FileReference expected = new FileReference(UUID.randomUUID().toString(), "file1", "/post/image/file1.txt");
+        FileReference expected = new FileReference(UUID.randomUUID(), "file1", "/post/image/file1.txt");
 
         MockMultipartFile file = new MockMultipartFile(
                 "multipartFile",
@@ -65,6 +65,6 @@ public class FileControllerTest {
                         .file(uploadRequest)
                         .file(file))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(expected.id())));
+                .andExpect(jsonPath("$.id", equalTo(expected.id().toString())));
     }
 }

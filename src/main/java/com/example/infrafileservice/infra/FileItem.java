@@ -65,7 +65,7 @@ public class FileItem {
 
     public File toModel() {
         return new File(
-                id.toString(),
+                id,
                 name,
                 contentType,
                 path,
@@ -78,6 +78,6 @@ public class FileItem {
     }
 
     public FileReference toReference() {
-        return new FileReference(id.toString(), name, path);
+        return new FileReference(id, name, path);
     }
 }

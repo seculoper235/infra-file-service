@@ -4,8 +4,11 @@ import com.example.infrafileservice.domain.S3Provider;
 import com.example.infrafileservice.infra.FileItem;
 import com.example.infrafileservice.infra.FileRepository;
 import com.example.infrafileservice.model.FileStatus;
+import com.example.infrafileservice.web.exception.model.EntityNotFoundException;
 import com.example.infrafileservice.web.exception.model.PutObjectException;
 import io.vavr.control.Either;
+import org.jooq.*;
+import org.jooq.generated.tables.records.FileRecord;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,14 +20,16 @@ import software.amazon.awssdk.http.SdkHttpResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +38,11 @@ public class FileServiceTest {
     FileService fileService;
 
     S3Provider s3Provider = mock(S3Provider.class);
+
+    DSLContext dslContext = mock(DSLContext.class);
+    UpdateSetFirstStep<FileRecord> firstStep = mock(UpdateSetFirstStep.class);
+    UpdateSetMoreStep<FileRecord> moreStep = mock(UpdateSetMoreStep.class);
+    UpdateConditionStep<FileRecord> conditionStep = mock(UpdateConditionStep.class);
 
     FileRepository fileRepository = mock(FileRepository.class);
 
@@ -113,34 +123,40 @@ public class FileServiceTest {
     }
 
     // FIXME: JOOQ @MockitoBean 테스트 구현방법 고민 필요
-    /*@Test
+    @Test
     @DisplayName("파일 매핑 시, 해당 파일이 존재하지 않는다면 에러를 던진다")
     public void mapping_file_not_exist_files_throw_error() {
         String mappedBy = "post1";
         List<FileItem> temp = List.of(files.get(0));
-        List<UUID> expected = temp.stream().map(item -> UUID.fromString(item.toModel().id())).toList();
+        List<UUID> expected = temp.stream().map(item -> item.toModel().id()).toList();
 
-        given(fileRepository.findAllById(any())).willReturn(temp);
+        given(fileRepository.findAllById(any())).willReturn(Collections.emptyList());
 
-        Either<NoSuchElementException, List<FileReference>> references = verify(fileService.mapping(mappedBy, expected));
+        Either<EntityNotFoundException, List<FileReference>> references = fileService.mapping(mappedBy, expected);
 
         assertTrue(references.isLeft());
-        assertThrows(NoSuchElementException.class,
+        assertThrows(EntityNotFoundException.class,
                 () -> references.getOrElseThrow(it -> it));
-    }*/
+    }
 
-    /*@Test
+    @Test
     @DisplayName("파일 매핑 시, 해당 파일이 존재한다면 매핑된 파일들을 반환한다")
     public void mapping_file_exist_files_return_update_file_info() {
         String mappedBy = "post1";
         List<FileItem> temp = List.of(files.get(0));
-        List<UUID> expected = temp.stream().map(item -> UUID.fromString(item.toModel().id())).toList();
+        List<UUID> expected = temp.stream().map(item -> item.toModel().id()).toList();
+
+        given(fileRepository.findAllById(any())).willReturn(temp);
+        when(dslContext.update(any(Table.class))).thenReturn(firstStep);
+        when(firstStep.set(any(Field.class), anyString())).thenReturn(moreStep);
+        when(moreStep.where(any(Condition.class))).thenReturn(conditionStep);
+        when(conditionStep.execute()).thenReturn(1);
 
         given(fileRepository.findAllById(any())).willReturn(temp);
 
-        Either<NoSuchElementException, List<FileReference>> references = fileService.mapping(mappedBy, expected);
+        Either<EntityNotFoundException, List<FileReference>> references = fileService.mapping(mappedBy, expected);
 
         assertTrue(references.isRight());
-        assertThat(references.get().stream().map(FileReference::id).toList()).isEqualTo(expected.stream().map(UUID::toString).toList());
-    }*/
+        assertThat(references.get().stream().map(FileReference::id).toList()).isEqualTo(expected);
+    }
 }

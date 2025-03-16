@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/file")
@@ -34,17 +33,15 @@ public class FileController {
     public ResponseEntity<List<FileReference>> mapping(
             @RequestBody MappingRequest mappingRequest
     ) throws EntityNotFoundException {
-        String mapping = mappingRequest.mappedBy();
-        List<UUID> files = mappingRequest.files().stream().map(UUID::fromString).toList();
-
-        List<FileReference> result = fileService.mapping(mapping, files).getOrElseThrow(it -> it);
+        List<FileReference> result = fileService.mapping(mappingRequest.mappedBy(), mappingRequest.files())
+                .getOrElseThrow(it -> it);
 
         return ResponseEntity.ok(result);
     }
 
     @DeleteMapping
     public ResponseEntity<?> deleteByMapping(
-            @RequestParam(value="mapping") String mapping
+            @RequestParam(value = "mapping") String mapping
     ) {
         fileService.delete(mapping);
 

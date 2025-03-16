@@ -2,9 +2,11 @@ package com.example.infrafileservice.service;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.util.UUID;
+
 @JsonSerialize
 public record FileReference(
-        String id,
+        UUID id,
         String name,
         String path
 ) {
