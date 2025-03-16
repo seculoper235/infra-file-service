@@ -1,5 +1,6 @@
 package com.example.infrafileservice.infra;
 
+import com.example.infrafileservice.common.UUIDConverter;
 import com.example.infrafileservice.model.File;
 import com.example.infrafileservice.model.FileStatus;
 import com.example.infrafileservice.service.FileReference;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class FileItem {
     @Id
+    @Convert(converter = UUIDConverter.class)
     private UUID id;
 
     @Column(nullable = false, length = 40)

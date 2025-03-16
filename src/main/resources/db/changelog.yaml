@@ -67,3 +67,11 @@ databaseChangeLog:
                   type: datetime
                   constraints:
                     nullable: false
+  - changeSet:
+      id: modifyColumn-file-id
+      author: DevTeller
+      changes:
+        -  modifyDataType:
+             columnName: id
+             newDataType: uuid
+             tableName: FILE
