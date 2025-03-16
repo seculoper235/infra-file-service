@@ -1,4 +1,4 @@
-package com.example.infrafileservice.web.exception;
+package com.example.infrafileservice.web.exception.model;
 
 public class PutObjectException extends Exception {
 

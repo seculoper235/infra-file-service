@@ -4,7 +4,8 @@ import com.example.infrafileservice.domain.S3Provider;
 import com.example.infrafileservice.infra.FileItem;
 import com.example.infrafileservice.infra.FileRepository;
 import com.example.infrafileservice.model.FileStatus;
-import com.example.infrafileservice.web.exception.PutObjectException;
+import com.example.infrafileservice.web.exception.model.EntityNotFoundException;
+import com.example.infrafileservice.web.exception.model.PutObjectException;
 import io.vavr.control.Either;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import static com.example.infrafileservice.domain.S3Provider.BUCKET_NAME;
@@ -61,9 +63,10 @@ public class FileService {
      *
      * @param mappedBy 연관관계의 주인 데이터의 id
      * @param files    연관관계로 등록할 TEMP 상태의 파일 id
+     * @throws NoSuchElementException 매개변수 <b>files</b> 에 해당하는 데이터가 없을 경우 발생
      */
     @Transactional
-    public List<FileReference> mapping(
+    public Either<EntityNotFoundException, List<FileReference>> mapping(
             String mappedBy,
             List<UUID> files
     ) {
@@ -72,13 +75,21 @@ public class FileService {
                 .where(FILE.MAPPED_BY.eq(mappedBy))
                 .execute();
 
-        return fileRepository.findAllById(files).stream()
-                .peek(item -> {
-                    item.mapping(mappedBy);
-                    item.changeStatus(FileStatus.USE);
-                })
-                .map(FileItem::toReference)
-                .toList();
+        List<FileItem> fileItemList = fileRepository.findAllById(files);
+
+        if (files.size() != fileItemList.size()) {
+            return Either.left(new EntityNotFoundException("파일이 존재하지 않습니다"));
+        } else {
+            List<FileReference> result = fileItemList.stream()
+                    .peek(item -> {
+                        item.mapping(mappedBy);
+                        item.changeStatus(FileStatus.USE);
+                    })
+                    .map(FileItem::toReference)
+                    .toList();
+
+            return Either.right(result);
+        }
     }
 
     public void delete(
