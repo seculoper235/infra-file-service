@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.jooq.generated.Tables.FILE;
@@ -33,7 +34,7 @@ public class FileDSLTest extends JooqIntegrationTest {
                 FILE.CREATED_AT,
                 FILE.UPDATED_AT
         ).values(
-                "619a3167-428a-43a4-b246-c0462286d962",
+                UUID.fromString("619a3167-428a-43a4-b246-c0462286d962"),
                 "temp-file",
                 "text/plain",
                 "/post/image/619a3167-428a-43a4-b246-c0462286d962",
@@ -42,7 +43,7 @@ public class FileDSLTest extends JooqIntegrationTest {
                 LocalDateTime.now().minusMinutes(10),
                 LocalDateTime.now().minusMinutes(10)
         ).values(
-                "619a3167-428a-43a4-b246-c0462286d963",
+                UUID.fromString("619a3167-428a-43a4-b246-c0462286d963"),
                 "delete-file",
                 "text/plain",
                 "/post/image/619a3167-428a-43a4-b246-c0462286d963",

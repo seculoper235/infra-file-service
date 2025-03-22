@@ -70,16 +70,16 @@ public class FileService {
             String mappedBy,
             List<UUID> files
     ) {
-        dslContext.update(FILE)
-                .set(FILE.STATUS, FileStatus.DELETE.name())
-                .where(FILE.MAPPED_BY.eq(mappedBy))
-                .execute();
-
         List<FileItem> fileItemList = fileRepository.findAllById(files);
 
         if (files.size() != fileItemList.size()) {
             return Either.left(new EntityNotFoundException("파일이 존재하지 않습니다"));
         } else {
+            dslContext.update(FILE)
+                    .set(FILE.STATUS, FileStatus.DELETE.name())
+                    .where(FILE.MAPPED_BY.eq(mappedBy))
+                    .execute();
+
             List<FileReference> result = fileItemList.stream()
                     .peek(item -> {
                         item.mapping(mappedBy);
