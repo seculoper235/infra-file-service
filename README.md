@@ -3,7 +3,13 @@
 Infra Development에 사용되는 파일 서비스 API 입니다
 
 ---
-## 관련 저장소
+## 📝 개발 스펙
+| ORM  | DSL  | DB 버전관리   | 보조      |
+|------|------|-----------|---------|
+| JPA  | JOOQ | liquibase | vavr.io |
+
+---
+## 📝 관련 저장소
 * **인프라**\
 https://github.com/seculoper235/Kubernetes_Development
 
